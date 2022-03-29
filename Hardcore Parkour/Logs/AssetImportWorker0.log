@@ -472,3 +472,10 @@ Received Import Request.
   path: Assets/_TerrainAutoUpgrade/layer_proto_35cf3da06f5211986.terrainlayer
   artifactKey: Guid(67e08a65987918149a170ca72f41ae20) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/_TerrainAutoUpgrade/layer_proto_35cf3da06f5211986.terrainlayer using Guid(67e08a65987918149a170ca72f41ae20) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c2f2f789fe9ba1568f3d6062a1965857') in 0.013940 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 198.012582 seconds.
+  path: Assets/3rd Party/DigitalKonstrukt/Prototyping_Pack_Free/Resources/Textures/proto_3.png
+  artifactKey: Guid(2807688b9d7782c48b64d3ad546e6f16) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/3rd Party/DigitalKonstrukt/Prototyping_Pack_Free/Resources/Textures/proto_3.png using Guid(2807688b9d7782c48b64d3ad546e6f16) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9e11449c84cad29867af109dcdc57465') in 0.130622 seconds 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
