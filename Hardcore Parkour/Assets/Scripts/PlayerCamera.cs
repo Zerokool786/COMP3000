@@ -19,7 +19,7 @@ public class PlayerCamera : MonoBehaviour
     }
 
 
-    private void Update()
+    private void Update() //input function
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX; //gets mouse input
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
