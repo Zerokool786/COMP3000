@@ -8,6 +8,13 @@ public class playerMovement : MonoBehaviour
 
     public Transform orientation;
 
+    [Header("Ground Check")] //check if player is grounded
+    public float playerHeight;
+    public LayerMask whatIsGround; //a layermask for whatIsGround tag 
+    bool grounded;                 //conditional
+
+    public float groundDrag;
+
     public float moveSpeed;
 
     float horizontalInput;
@@ -24,7 +31,16 @@ public class playerMovement : MonoBehaviour
 
     private void Update()
     {
+
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.2f + 0.5f, whatIsGround);  //perform ground check 
         keyInput();
+
+        //apply the drag
+        if (grounded)
+            rb.drag = groundDrag;
+        // not grounded then put the value to zero
+        else                
+            rb.drag = 0;  
     }
 
     private void FixedUpdate()
