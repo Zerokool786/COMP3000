@@ -18,8 +18,11 @@ public class playerMovement : MonoBehaviour
     [Header("Crouching")]
     public float crouchSpeed;
     public float crouchYScale;
-    public float defaultYScale;
+    private float defaultYScale;
 
+    [Header("Slope Handler")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -112,6 +115,10 @@ public class playerMovement : MonoBehaviour
         else      
         {
             currentState = movementState.air;    //player is air if above statements are not executed 
+
+
+
+
         }
     }
     private void keyInput()
@@ -150,6 +157,10 @@ public class playerMovement : MonoBehaviour
         //walking in the direcion relative to where player is looking
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
+        if (onSlope())   // if player's on the slope 
+        {
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);  //add force in the slope direction
+        }
 
         if (isGrounded) // on the ground
 
@@ -158,6 +169,8 @@ public class playerMovement : MonoBehaviour
         else if (!isGrounded)  //if player is in air multiply movement speed with air multiplier 
 
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+
+        rb.useGravity = !onSlope(); //turn on gravity if not on slope 
     }
 
     private void speedController()
@@ -189,5 +202,22 @@ public class playerMovement : MonoBehaviour
     private void resetJump()
     {
         isJumping = true;
+    }
+
+     private bool onSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal); //check steepness of the slope 
+
+            return angle < maxSlopeAngle && angle != 0;  //return true if angle is smaller than max slope angle and not zero
+        }
+
+        return false; //if no hit for the raycast then return false
+    }
+
+    private Vector3 GetSlopeMoveDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized; 
     }
 }
