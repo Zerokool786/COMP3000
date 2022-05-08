@@ -160,6 +160,9 @@ public class playerMovement : MonoBehaviour
         if (onSlope())   // if player's on the slope 
         {
             rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);  //add force in the slope direction
+
+            if (rb.velocity.y > 0)  //if player moves in Y direction and it's velocity is greater than zero 
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force); // add some force to the rb to keep a sophisticated motion while traversing on a slanted platform
         }
 
         if (isGrounded) // on the ground
@@ -175,16 +178,27 @@ public class playerMovement : MonoBehaviour
 
     private void speedController()
     {
-        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        //limit the velocity if required
-        if (flatVelocity.magnitude > moveSpeed)   //if player goes faster than movement speed                    
+        
+           
+        if (onSlope()) //speed limit while traversing on a slanted platform
         {
-            //estimate the max velocity
-            Vector3 limitedVelocity = flatVelocity.normalized * moveSpeed;
+            if (rb.velocity.magnitude > moveSpeed)  //check player velocity is greater than movespeed
+                rb.velocity = rb.velocity.normalized * moveSpeed; //normalize the movement for any sort of direction
+        }
 
-            //apply max velocity to the rigidbody
-            rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
+        else
+        {
+            Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            //limit the velocity if required
+            if (flatVelocity.magnitude > moveSpeed)   //if player goes faster than movement speed                    
+            {
+                //estimate the max velocity
+                Vector3 limitedVelocity = flatVelocity.normalized * moveSpeed;
+
+                //apply max velocity to the rigidbody
+                rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
+            }
         }
 
 
