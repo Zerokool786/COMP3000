@@ -74,7 +74,7 @@ public class playerMovement : MonoBehaviour
     private void Update()
     {
         
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.9f + 0.5f, whatIsGround);  //perform ground check 
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.8f + 0.4f, whatIsGround);  //perform ground check 
         keyInput();
         speedController();
         statesHandler();
