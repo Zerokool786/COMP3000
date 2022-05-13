@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
+    public float sensX = 100f;
+    public float sensY = 100f;
     public Transform orientation; //character 
 
     //camera rotation
@@ -31,6 +31,6 @@ public class PlayerCamera : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(rotX, rotY, 0);      //camera rotation for X and Y 
         orientation.rotation = Quaternion.Euler(0, rotY, 0);       //character rotation along Y 
-
+        
     }
 }
