@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float sensX = 100f;
-    public float sensY = 100f;
+    public float sensX;
+    public float sensY;
     public Transform orientation; //character 
+    public Transform playerBody;
 
     //camera rotation
     float rotX; 
@@ -29,8 +30,9 @@ public class PlayerCamera : MonoBehaviour
         rotX -= mouseY;
         rotX = Mathf.Clamp(rotX, -90f, 90f); //range of vertical look
 
-        transform.rotation = Quaternion.Euler(rotX, rotY, 0);      //camera rotation for X and Y 
-        orientation.rotation = Quaternion.Euler(0, rotY, 0);       //character rotation along Y 
-        
+        transform.rotation = Quaternion.Euler(rotX, rotY, 0f);      //camera rotation for X and Y 
+        orientation.rotation = Quaternion.Euler(0f, rotY, 0f);       //character rotation along Y 
+
+        playerBody.Rotate(Vector3.up * mouseX);
     }
 }

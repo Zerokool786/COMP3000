@@ -5,7 +5,7 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     public AnimationCurve directionCurve;
-    public float Scale = 1f;
+    public float Scale = 5f;
 
     // Update is called once per frame
     void Update()

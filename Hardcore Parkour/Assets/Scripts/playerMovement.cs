@@ -6,7 +6,7 @@ public class playerMovement : MonoBehaviour
 {
     [Header("Movement")]
 
-    public float jumpForce;
+    public float jumpForce = 5f;
     public float jumpCooldown;
     public float airMultiplier;
     
@@ -22,6 +22,7 @@ public class playerMovement : MonoBehaviour
 
     [Header("Slope Handler")]
     public float maxSlopeAngle;
+    private bool slopeExit;
     private RaycastHit slopeHit;
 
     [Header("Keybinds")]
@@ -38,8 +39,8 @@ public class playerMovement : MonoBehaviour
     public LayerMask whatIsGround; //a layermask for whatIsGround tag 
 
 
-    public movementState currentState;    //stores current state of the player
-    public enum movementState
+    public MovementState currentState;    //stores current state of the player
+    public enum MovementState
     {
         crouching,
         walking,
@@ -68,16 +69,16 @@ public class playerMovement : MonoBehaviour
         isJumping = true;
         defaultYScale = transform.localScale.y;  //saves default y scale of the rigidbody
 
-        resetJump();
+        ResetJump();
     }
 
     private void Update()
     {
         
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.8f + 0.4f, whatIsGround);  //perform ground check 
-        keyInput();
-        speedController();
-        statesHandler();
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);  //perform ground check 
+        KeyInput();
+        SpeedController();
+        StatesHandler();
         //apply the drag
         if (isGrounded)
             rb.drag = groundDrag;
@@ -89,39 +90,39 @@ public class playerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        movePlayer();
+        MovePlayer();
     }
 
-    private void statesHandler()
+    private void StatesHandler()
     {
         if (Input.GetKey(crouchKey))   ///crouching if left control pressed 
         {
-            currentState = movementState.crouching;   //change current state to crouching
-            moveSpeed = crouchSpeed;      
+            currentState = MovementState.crouching;   //change current state to crouching
+            moveSpeed = crouchSpeed;       
         }
 
         if(isGrounded && Input.GetKey(sprintKey))  //Sprinting if left shift is pressed
         {
-            currentState = movementState.sprinting;  //change current state to sprinting
+            currentState = MovementState.sprinting;  //change current state to sprinting
             moveSpeed = sprintSpeed; 
         }
 
         else if (isGrounded)    //walking if grounded
         {
-            currentState = movementState.walking; //change current state to walking
+            currentState = MovementState.walking; //change current state to walking
             moveSpeed = walkingSpeed;         
         }
 
         else      
         {
-            currentState = movementState.air;    //player is air if above statements are not executed 
+            currentState = MovementState.air;    //player is air if above statements are not executed 
 
 
 
 
         }
     }
-    private void keyInput()
+    private void KeyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
@@ -134,7 +135,7 @@ public class playerMovement : MonoBehaviour
             Jump();
 
             // reset jump function with a delay and do a continous jump when holding down space key
-            Invoke(nameof(resetJump), jumpCooldown);
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
 
         //start crouching if left control is pressed 
@@ -152,17 +153,17 @@ public class playerMovement : MonoBehaviour
         }
     }
 
-    private void movePlayer()
+    private void MovePlayer()
     {
         //walking in the direcion relative to where player is looking
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        if (onSlope())   // if player's on the slope 
+        if (OnSlope() && !slopeExit)   // if player's on the slope 
         {
             rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);  //add force in the slope direction
 
             if (rb.velocity.y > 0)  //if player moves in Y direction and it's velocity is greater than zero 
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force); // add some force to the rb to keep a sophisticated motion while traversing on a slanted platform
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force); // add some force downward to the rb to keep a sophisticated motion while traversing on a slanted platform
         }
 
         if (isGrounded) // on the ground
@@ -173,14 +174,14 @@ public class playerMovement : MonoBehaviour
 
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
-        rb.useGravity = !onSlope(); //turn on gravity if not on slope 
+        rb.useGravity = !OnSlope(); //turn on gravity if not on slope 
     }
 
-    private void speedController()
+    private void SpeedController()
     {
         
            
-        if (onSlope()) //speed limit while traversing on a slanted platform
+        if (OnSlope() && !slopeExit) //speed limit while traversing on a slanted platform
         {
             if (rb.velocity.magnitude > moveSpeed)  //check player velocity is greater than movespeed
                 rb.velocity = rb.velocity.normalized * moveSpeed; //normalize the movement for any sort of direction
@@ -205,20 +206,23 @@ public class playerMovement : MonoBehaviour
     }
     private void Jump()
     {
+        slopeExit = true;
         // reset y velocity to zero so to jump the exact same height 
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         //apply force upwards only once
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        //rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         
         
     }
 
-    private void resetJump()
+    private void ResetJump()
     {
         isJumping = true;
+
+        slopeExit = false;
     }
 
-     private bool onSlope()
+     private bool OnSlope()
     {
         if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
