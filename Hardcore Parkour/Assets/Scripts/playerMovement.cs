@@ -6,7 +6,7 @@ public class playerMovement : MonoBehaviour
 {
     [Header("Movement")]
 
-    public float jumpForce = 5f;
+    public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     

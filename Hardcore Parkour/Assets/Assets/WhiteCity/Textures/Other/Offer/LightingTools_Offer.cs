@@ -10,8 +10,8 @@ using System;
 using System.Linq;
 [ExecuteInEditMode]
 public class LightingTools_Offer : MonoBehaviour {
-
-	WWW www;
+    [Obsolete]
+    WWW www;
 	[Space(3)]
 	// Button sprites
 	[HideInInspector] public Texture[] targetTextures;
@@ -30,7 +30,8 @@ public class LightingTools_Offer : MonoBehaviour {
 	// Activated when player is online    (Ad border    )
 	[HideInInspector] public bool isLoading;
 
-	void Start()
+    [Obsolete]
+    void Start()
 	{
 		
 		textures = new Texture2D[targetTextures.Length];
@@ -44,7 +45,8 @@ public class LightingTools_Offer : MonoBehaviour {
 
 	}
 
-	public void Reload()
+    [Obsolete]
+    public void Reload()
 	{
 		StopCoroutine (ReadLinks());
 		StopCoroutine (ReadImages ());
@@ -62,7 +64,9 @@ public class LightingTools_Offer : MonoBehaviour {
 	}
 
 	int loaded;
-	IEnumerator ReadImages()
+
+    [Obsolete]
+    IEnumerator ReadImages()
 	{
 		for(int b = 0;b<ImagesURL.Length;b++)
 		{
@@ -80,7 +84,9 @@ public class LightingTools_Offer : MonoBehaviour {
 		}
 		isLoading = false;
 	}
-	IEnumerator ReadLinks()
+
+    [Obsolete]
+    IEnumerator ReadLinks()
 	{
 		// Read Link URLs
 		www = new WWW (gameLinks);
