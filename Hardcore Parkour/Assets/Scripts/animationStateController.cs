@@ -66,5 +66,45 @@ public class animationStateController : MonoBehaviour
         {
             animator.SetBool("isCrouching", false);
         }
+
+        if (Input.GetKey("d"))
+        {
+            animator.SetBool("isRunningRight", true);
+        }
+
+        if (!Input.GetKey("d"))
+        {
+            animator.SetBool("isRunningRight", false);
+        }
+
+        if (Input.GetKey("a"))
+        {
+            animator.SetBool("isRunningLeft", true);
+        }
+
+        if (!Input.GetKey("a"))
+        {
+            animator.SetBool("isRunningLeft", false);
+        }
+
+        if (Input.GetKey("a"))
+        {
+            animator.SetBool("isWalkingLeft", true);
+        }
+
+        if (!Input.GetKey("a"))
+        {
+            animator.SetBool("isWalkingLeft", false);
+        }
+
+        if (Input.GetKey("d"))
+        {
+            animator.SetBool("isWalkingRight", true);
+        }
+
+        if (!Input.GetKey("d"))
+        {
+            animator.SetBool("isWalkingRight", false);
+        }
     }
 }
