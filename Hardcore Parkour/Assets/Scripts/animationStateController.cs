@@ -46,5 +46,15 @@ public class animationStateController : MonoBehaviour
         {
             animator.SetBool(isRunningHash, false); //set the isRunning to false
         }
+
+        if (Input.GetKey("space"))
+        {
+            animator.SetBool("isJumping", true);
+        }
+
+        if (!Input.GetKey("space"))
+        {
+            animator.SetBool("isJumping", false);
+        }
     }
 }
