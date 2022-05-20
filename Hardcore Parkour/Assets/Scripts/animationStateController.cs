@@ -56,5 +56,15 @@ public class animationStateController : MonoBehaviour
         {
             animator.SetBool("isJumping", false);
         }
+
+        if (Input.GetKey("left ctrl"))
+        {
+            animator.SetBool("isCrouching", true);
+        }
+
+        if(!Input.GetKey("left ctrl"))
+        {
+            animator.SetBool("isCrouching", false);
+        }
     }
 }
