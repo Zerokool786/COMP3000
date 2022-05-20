@@ -11,12 +11,24 @@ public class WallRun : MonoBehaviour
     public LayerMask whatIsWall;
 
 
+    [Header("ClimbJump")]
+    public float climbJumpUpForce;
+    public float climbJumpBackForce;
+
+    public KeyCode jumpKey = KeyCode.Space;
+
+    public int climbJumps;
+    private int climbJumpsLeft;
+
+
     [Header("Climbing")]
     public float climbSpeed;
     public float maxClimbTime;
     private float climbTimer;
 
     private bool climbing;
+
+    
 
     [Header("Wall Detection")]
     public float detectionLength;
@@ -27,6 +39,12 @@ public class WallRun : MonoBehaviour
     private RaycastHit frontWallHit;
 
     private bool wallFront;
+
+    private Transform lastWall;
+    private Vector3 lastWallNormal;
+    
+    //min amount for wall normal for it to change 
+    public float minWallNormalAngleChange; 
 
     private void Update()
     {
@@ -40,11 +58,19 @@ public class WallRun : MonoBehaviour
     {
         wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
         wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
+
+        //check conditional front wall hit size is different from from the last wall OR if the wall normal has changed then compare the current normal wall and the last one
+        bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
         
-        if (movePlayer.isGrounded)
+
+        //if exists a new wall in front of the player and the player hits it OR the player is grounded
+        if ((wallFront && newWall) || movePlayer.isGrounded)
         {
-            //reset climb timer if player is grounded
-            climbTimer = maxClimbTime; 
+            //reset climb timer
+            climbTimer = maxClimbTime;
+            
+            //reset climbJumpsLeft
+            climbJumpsLeft = climbJumps;
         }
     }
 
@@ -73,6 +99,8 @@ public class WallRun : MonoBehaviour
             if (climbing) StopClimbing(); //if player is not climbing stop all active climbs
         
         }
+
+        if (wallFront && Input.GetKeyDown(jumpKey) && climbJumpsLeft > 0) ClimbJump();
     
     
     }
@@ -80,6 +108,10 @@ public class WallRun : MonoBehaviour
     private void BeginClimbing()
     {
         climbing = true;
+
+        //store transform of current wall
+        lastWall = frontWallHit.transform;
+        lastWallNormal = frontWallHit.normal;
     }
 
 
@@ -91,6 +123,16 @@ public class WallRun : MonoBehaviour
     private void StopClimbing()
     {
         climbing = false;
+    }
+
+    private void ClimbJump()
+    {
+        Vector3 forceToApply = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
+
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(forceToApply, ForceMode.Impulse);
+
+        climbJumpsLeft--;
     }
 
 }
