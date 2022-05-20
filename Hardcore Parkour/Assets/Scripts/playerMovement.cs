@@ -49,7 +49,7 @@ public class playerMovement : MonoBehaviour
 
     }
     
-    bool isGrounded;               //conditional
+    public bool isGrounded;              
 
     public Transform orientation;
 
