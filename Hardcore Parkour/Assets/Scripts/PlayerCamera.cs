@@ -28,7 +28,7 @@ public class PlayerCamera : MonoBehaviour
         
         rotY += mouseX;
         rotX -= mouseY;
-        rotX = Mathf.Clamp(rotX, -90f, 90f); //range of vertical look
+        rotX = Mathf.Clamp(rotX, -90f, 58f); //range of vertical look
 
         transform.rotation = Quaternion.Euler(rotX, rotY, 0f);      //camera rotation for X and Y 
         orientation.rotation = Quaternion.Euler(0f, rotY, 0f);       //character rotation along Y 
