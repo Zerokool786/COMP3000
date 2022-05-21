@@ -7,6 +7,7 @@ public class animationStateController : MonoBehaviour
     Animator animator;
     int isWalkingHash;
     int isRunningHash;
+
     
     // Start is called before the first frame update
     void Start()
