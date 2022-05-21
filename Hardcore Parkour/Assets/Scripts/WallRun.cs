@@ -44,7 +44,9 @@ public class WallRun : MonoBehaviour
     private Vector3 lastWallNormal;
     
     //min amount for wall normal for it to change 
-    public float minWallNormalAngleChange; 
+    public float minWallNormalAngleChange;
+
+   
 
     private void Update()
     {
@@ -118,6 +120,7 @@ public class WallRun : MonoBehaviour
     private void ClimbMovement()
     {
         rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z); //set Y velocity of the player to climb speed
+
     }
 
     private void StopClimbing()

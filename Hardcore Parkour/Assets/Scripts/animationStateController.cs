@@ -7,8 +7,14 @@ public class animationStateController : MonoBehaviour
     Animator animator;
     int isWalkingHash;
     int isRunningHash;
-
+    public AudioSource source;
+    public AudioClip clip;
+    //public AudioSource jumpSource;
+    //public AudioClip jumpClip;
+    public AudioClip musicStart;
+    public AudioSource musicSource;
     
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +22,10 @@ public class animationStateController : MonoBehaviour
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
         Debug.Log(animator);
+
+        musicSource.PlayOneShot(musicStart);
+        musicSource.PlayScheduled(AudioSettings.dspTime + clip.length);
+
     }
 
     // Update is called once per frame
@@ -29,33 +39,47 @@ public class animationStateController : MonoBehaviour
         if (!isWalking && forwardPressed) //player is pressing w key
         {
             animator.SetBool(isWalkingHash, true); //set isWalking to true
+            //source.PlayOneShot(clip);
+            
+
+
+
         }
 
         if (isWalking && !forwardPressed) //player is not pressing w key
         {
             animator.SetBool(isWalkingHash, false);  //set isWalking to false
+            //source.Stop();
+            
         }
 
         //if player is walking and not running and presses left shift
         if (!isrunning && (forwardPressed && runPressed)) 
         {
             animator.SetBool(isRunningHash, true); //set the isRunning bool to true
+            source.PlayOneShot(clip);
+            source.PlayScheduled(AudioSettings.dspTime + clip.length);
+
         }
 
         //if player is running and stops running or stops walking
         if (isrunning && (!forwardPressed || !runPressed)) 
         {
             animator.SetBool(isRunningHash, false); //set the isRunning to false
+            source.Stop();
+
         }
 
         if (Input.GetKey("space"))
         {
             animator.SetBool("isJumping", true);
+            
         }
 
         if (!Input.GetKey("space"))
         {
             animator.SetBool("isJumping", false);
+            
         }
 
         if (Input.GetKey("left ctrl"))
@@ -81,11 +105,14 @@ public class animationStateController : MonoBehaviour
         if (Input.GetKey("a"))
         {
             animator.SetBool("isRunningLeft", true);
+            
+
         }
 
         if (!Input.GetKey("a"))
         {
             animator.SetBool("isRunningLeft", false);
+            
         }
 
         if (Input.GetKey("a"))
